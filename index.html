@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+
     <title>Montagem de peça em portas</title>
 </head>
 <body>
     <a-scene>
-        <a-assets>
+        
+        <!-- Ambiente -->
+        <a-entity environment="preset: forest; ground: flat; dressingAmount: 50; playArea: 1"></a-entity>
 
-        </a-assets>
-        <a-sky>
-            
-        </a-sky>
+        <!-- Crosshair -->
+        <a-camera position="0 2 0">
+            <a-cursor color="#2c3e50"></a-cursor>
+        </a-camera>
+        
     </a-scene>
+    <script src="script.js"></script>
 </body>
 </html>
