@@ -2,10 +2,13 @@
   "name": "montagem_de_peca",
   "version": "1.0.0",
   "description": "Trabalho do 3° semestre com realidade virtual de Laboratório 3 com o Professor Giuliano",
-  "main": "index.js",
+  "main": "script.js",
+  "dependencies": {
+    "three": "^0.114.0"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./view/visualization/script.js"
+    "build": "browserify script.js -o bundle.js"
   },
   "repository": {
     "type": "git",
@@ -16,10 +19,5 @@
   "bugs": {
     "url": "https://github.com/NicolasFujisawa/montagem_de_peca/issues"
   },
-  "homepage": "https://github.com/NicolasFujisawa/montagem_de_peca#readme",
-  "dependencies": {
-    "aframe": "^1.0.4",
-    "fs": "0.0.1-security",
-    "http": "0.0.0"
-  }
+  "homepage": "https://github.com/NicolasFujisawa/montagem_de_peca#readme"
 }
