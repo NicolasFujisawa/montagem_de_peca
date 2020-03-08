@@ -2,13 +2,13 @@
   "name": "montagem_de_peca",
   "version": "1.0.0",
   "description": "Trabalho do 3° semestre com realidade virtual de Laboratório 3 com o Professor Giuliano",
-  "main": "script.js",
+  "main": "view/modeling/script.js",
   "dependencies": {
     "three": "^0.114.0"
   },
   "devDependencies": {},
   "scripts": {
-    "build": "browserify script.js -o bundle.js"
+    "build": "browserify view/modeling/script.js -o bundle.js"
   },
   "repository": {
     "type": "git",
