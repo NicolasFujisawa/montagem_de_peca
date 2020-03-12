@@ -49,6 +49,9 @@ class AFrameObj{
         },interval);
     }
 }
+
 const obj = new AFrameObj({id:"redCube", movable:true});
+
 const crosshair = new AFrameObj({id:"cursor"});
+
 obj.trackReference(crosshair, 3);
