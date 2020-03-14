@@ -1,20 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
-    <title>Modeling</title>
-</head>
-<body>
-    <a-scene>
-        <!-- Objetos -->
-        <a-assets>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+        <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
 
-        </a-assets>
-
-        <!-- Ambiente -->
+        <title>Montagem de peças em porta</title>
+    </head>
+    <body>
+        <a-scene>
             
-    </a-scene>
-</body>
+            <!-- Objetos -->
+            <a-assets>
+                <a-asset-item id="hangar" src="../../models/hangar/scene.gltf"></a-asset-item>
+                <a-asset-item id="pilar" src="../../models/pilar/scene.gltf"></a-asset-item>
+                <a-asset-item id="door" src="https://raw.githubusercontent.com/KurtRodrigues/Project01/master/modelos%203D%20Porta%20avi%C3%A3o/1.2.gltf"></a-asset-item>
+            </a-assets>
+
+            <!-- Ambiente -->
+            <a-entity environment="preset: japan; ground: flat; dressingAmount: 0; fog: 0.1; lightPosition: -2 5 -2" scale="0.5 0.5 0.5"position="0 0 0"></a-entity>
+            <!-- iluminação -->
+            <a-entity light="type: ambient; intensity: 0.3;" id="light1" visible="True"></a-entity>
+            <a-entity light="type: directional;
+                    castShadow: true;
+                    intensity: 0.26;
+                    shadowCameraVisible: false;
+                    shadowRadius:1.5"
+                
+                scale="0.76 0.66 0.83"
+                position="-2.92 -0.26 6.82"
+                id="light2"> </a-entity>
+            <a-entity light="type: directional;
+                    castShadow: true;
+                    intensity: 0.26;
+                    shadowCameraVisible: false;
+                    shadowRadius:1.5"
+            
+            scale="0.76 0.66 0.83"
+            position="2.92 -0.26 6.82"
+            id="light2"> </a-entity>
+            <!-- Modelos -->
+            <a-entity gltf-model="#door" scale="1.6 1.6 1.6" position="0 0.4 -5" rshadow="cast: true" rotation="0 0 0" ></a-entity>
+            <a-entity gltf-model="#pilar" scale="3 3 2" position="0 0 -5"></a-entity>
+            <a-entity gltf-model="#hangar" scale="0.001 0.001 0.001" position="-7.6 -0.15 3"></a-entity>
+            
+            <!-- Crosshair -->
+            <a-camera position="0 2 0">
+                <a-cursor color="#2c3e50"></a-cursor>
+            </a-camera>
+            
+        </a-scene>
+        <script src="script.js"></script>
+    </body>
 </html>
