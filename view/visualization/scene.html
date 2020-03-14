@@ -44,13 +44,22 @@
             <a-entity id="door" gltf-model="#door" scale="1.6 1.6 1.6" position="0 0.4 -5" rshadow="cast: true" rotation="0 0 0" ></a-entity>
             <a-entity gltf-model="#pilar" scale="3 3 2" position="0 0 -5"></a-entity>
             <a-entity gltf-model="#hangar" scale="0.001 0.001 0.001" position="-7.6 -0.15 3"></a-entity>
-            
+            <!-- Painel -->
+            <a-entity cursor-listener id="panel" geometry="primitive: plane; height: 1; width: 1" position="-2.4 1.7 -2.6"
+            material="color: black; opacity: 0.8"></a-entity>           
+
             <!-- Crosshair -->
-            <a-camera position="0 2 0">
-                <a-cursor color="#2c3e50"></a-cursor>
-            </a-camera>
-            
-        </a-scene>
+            <a-entity camera look-controls wasd-controls position="0 2 0">
+                <a-entity cursor="fuse: true; fuseTimeout: 3000"
+                    position="0 0 -1"
+                    geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.015"
+                    material="color: green; shader: flat"
+                    animation__click="property: ; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+                    animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 3000; from: 1 1 1; to: 0.1 0.1 0.1"
+                    animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"></a-entity>
+                </a-entity>
+              </a-entity>
+
         <script src="script.js"></script>
     </body>
 </html>
