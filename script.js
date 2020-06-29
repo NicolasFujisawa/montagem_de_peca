@@ -27,7 +27,7 @@ class AFrameObj{
         });
     }
 
-    async trackReference(reference,distance,{interval=5}={})
+    trackReference(reference,distance,{interval=5}={})
     {
         this.trackInterval = setInterval(() => {
             reference.updatePosition();
@@ -51,11 +51,22 @@ class AFrameObj{
         },interval);
     }
 
+    stopTracking(){
+        if(this.trackInterval != null){
+            clearInterval(this.trackInterval);
+            return true;
+        }
+        return false;
+    }
+
     onSelect(cursor, size, func, {ticks=0} = {}){
         this.selectInterval = setInterval(() => {
             if(ticks === 3){
-                func();
-                clearInterval(this.selectInterval);
+                const result = func();
+                if(result){
+                    clearInterval(this.selectInterval);
+                }
+                console.log(result);
             }
             this.updatePosition();
             cursor.updatePosition();
@@ -72,14 +83,27 @@ class AFrameObj{
             this.worldPosition.y <= drawnPointY+size && this.worldPosition.y >= drawnPointY-size){
                 ticks+=1;
             }else ticks = 0;
-            console.log(ticks);
         },250);
     }
 }
 
-const obj = new AFrameObj({id:"redCube", movable:true});
+const redObj = new AFrameObj({id:"redCube", movable:true});
+const blueObj = new AFrameObj({id:"blueCube", movable:true});
 const crosshair = new AFrameObj({id:"cursor"});
 
-obj.onSelect(crosshair,1,() =>{
-    obj.trackReference(crosshair,3);
+redObj.onSelect(crosshair,1,() =>{
+    redObj.trackReference(crosshair,3);
+    return true;
+});
+
+blueObj.onSelect(crosshair,1,() =>{
+    if(redObj.stopTracking()){
+        redObj.moveObject({
+            newPos:{
+                x:1,
+                y:1,
+                z:-3
+            }
+        });
+    }
 });
