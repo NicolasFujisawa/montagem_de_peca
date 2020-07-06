@@ -89,10 +89,31 @@ class AFrameObj{
 
 const redObj = new AFrameObj({id:"redCube", movable:true});
 const blueObj = new AFrameObj({id:"blueCube", movable:true});
+const peca1 = new AFrameObj({id:"peca1", movable:true});
+const peca2 = new AFrameObj({id:"peca2", movable:true});
+const peca3 = new AFrameObj({id:"peca3", movable:true});
+const porta = new AFrameObj({id:"porta", movable:false});
+
+
 const crosshair = new AFrameObj({id:"cursor"});
 
 redObj.onSelect(crosshair,1,() =>{
     redObj.trackReference(crosshair,3);
+    return true;
+});
+
+peca1.onSelect(crosshair,1,() =>{
+    peca1.trackReference(crosshair,3);
+    return true;
+});
+
+peca2.onSelect(crosshair,1,() =>{
+    peca2.trackReference(crosshair,3);
+    return true;
+});
+
+peca3.onSelect(crosshair,1,() =>{
+    peca3.trackReference(crosshair,3);
     return true;
 });
 
@@ -103,6 +124,18 @@ blueObj.onSelect(crosshair,1,() =>{
                 x:1,
                 y:1,
                 z:-3
+            }
+        });
+    }
+});
+
+porta.onSelect(crosshair,1,() =>{
+    if(peca1.stopTracking()){
+        peca1.moveObject({
+            newPos:{
+                x:-0.2,
+                y:0.3,
+                z:-2.7
             }
         });
     }
