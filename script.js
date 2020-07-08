@@ -28,6 +28,16 @@ class AFrameObj{
         });
     }
 
+    rotateObject({newRotation = {x:0,y:0,z:0}, dur="1500", easing="linear", elasticity="400"} = {}){
+        if(!this.movable){
+            throw "Object not movable";
+        }
+        this.__setAttribute__({
+            attrName:"animation",
+            attr:"property: rotation; to:"+newRotation.x+" "+newRotation.y+" "+newRotation.z+"; dur: "+dur+"easing: "+easing+"; elasticity: "+elasticity
+        })
+    }
+
     trackReference(reference,distance,{interval=5,yOffSet=1.6}={})
     {
         if(reference.isTracking) return false;
@@ -101,13 +111,6 @@ const lixeira = new AFrameObj({id:"lixeira", movable:true,size:{x:2,z:2,y:2}});
 const textBox = new AFrameObj({id:"text-box",movable:true});
 const crosshair = new AFrameObj({id:"cursor"});
 
-lixeira.rotateObject({
-    newRotation:{
-        x:0,
-        z:45,
-        y:0
-    }
-});
 textBox.trackReference(crosshair,1,{yOffSet:1.8});
 
 peca1.onSelectFunction = () =>{
