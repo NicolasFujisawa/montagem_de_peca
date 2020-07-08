@@ -105,9 +105,27 @@ peca3.onSelectFunction = () =>{
     peca3.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 
-peca1.onSelect(crosshair);
-peca2.onSelect(crosshair);
-peca3.onSelect(crosshair);
+peca1.onSelect(crosshair,{
+    size:{
+        x:0.2,
+        z:0.2,
+        y:2
+    }
+});
+peca2.onSelect(crosshair,{
+    size:{
+        x:0.2,
+        z:0.2,
+        y:2
+    }
+});
+peca3.onSelect(crosshair,{
+    size:{
+        x:0.1,
+        z:0.1,
+        y:2
+    }
+});
 
 porta.onSelectFunction = () =>{
     if(peca1.stopTracking()){
