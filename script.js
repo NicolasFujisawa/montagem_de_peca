@@ -19,7 +19,7 @@ class AFrameObj{
     }
 
     moveObject({newPos=this.worldPosition,dur="1500", easing="linear", elasticity="400"} = {}){
-        if(!this.movable) {
+        if(!this.movable){
             throw "Object not movable";
         }
         this.__setAttribute__({
@@ -95,12 +95,19 @@ class AFrameObj{
 const peca1 = new AFrameObj({id:"peca1", movable:true,size:{x:1,z:1,y:3}});
 const peca2 = new AFrameObj({id:"peca2", movable:true,size:{x:1,z:1,y:3}});
 const peca3 = new AFrameObj({id:"peca3", movable:true,size:{x:1,z:1,y:3}});
-const porta = new AFrameObj({id:"porta", movable:true,size:{x:1,z:1,y:5}});
+const porta = new AFrameObj({id:"porta", movable:false,size:{x:1,z:1,y:5}});
 
-const lixeira = new AFrameObj({id:"lixeira", movable:false,size:{x:2,z:2,y:2}});
+const lixeira = new AFrameObj({id:"lixeira", movable:true,size:{x:2,z:2,y:2}});
 const textBox = new AFrameObj({id:"text-box",movable:true});
 const crosshair = new AFrameObj({id:"cursor"});
 
+lixeira.rotateObject({
+    newRotation:{
+        x:0,
+        z:45,
+        y:0
+    }
+});
 textBox.trackReference(crosshair,1,{yOffSet:1.8});
 
 peca1.onSelectFunction = () =>{
