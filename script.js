@@ -38,7 +38,7 @@ class AFrameObj{
         })
     }
 
-    trackReference(reference,distance,{interval=5,yOffSet=1.6}={})
+    trackReference(reference,distance,{interval=5,yOffSet=1.6,rotationOffSet=245}={})
     {
         if(reference.isTracking) return false;
         this.trackInterval = setInterval(() => {
@@ -49,13 +49,29 @@ class AFrameObj{
             const newZ = referencePos.z * distance;
             const newY = Math.sqrt(distance**2-newX**2-newZ**2) * multiplier;
 
+            const rad = Math.atan2(newX,newZ);
+            const deg = rad * (180/Math.PI);
+
             const newPos={
                 x:newX,
                 y:newY+yOffSet,
                 z:newZ
             }
+
+            const newRotation={
+                x:0,
+                y:deg-rotationOffSet,
+                z:0
+            }
+
             this.moveObject({
                 newPos:newPos,
+                dur:"0",
+                elasticity:0
+            });
+
+            this.rotateObject({
+                newRotation:newRotation,
                 dur:"0",
                 elasticity:0
             });
@@ -81,7 +97,6 @@ class AFrameObj{
                 if(result){
                     clearInterval(this.selectInterval);
                 }
-                console.log(result);
             }
             this.updatePosition();
             cursor.updatePosition();
@@ -111,18 +126,15 @@ const lixeira = new AFrameObj({id:"lixeira", movable:true,size:{x:2,z:2,y:2}});
 const textBox = new AFrameObj({id:"text-box",movable:true});
 const crosshair = new AFrameObj({id:"cursor"});
 
-textBox.trackReference(crosshair,1,{yOffSet:1.8});
+//textBox.trackReference(crosshair,1,{yOffSet:1.8});
 
 peca1.onSelectFunction = () =>{
-    console.log(crosshair.isTracking);
     return peca1.trackReference(crosshair,2.5,{yOffSet:0.75});
 }
 peca2.onSelectFunction = () =>{
-    console.log(crosshair.isTracking);
     return peca2.trackReference(crosshair,2.5,{yOffSet:0});
 }
 peca3.onSelectFunction = () =>{
-    console.log(crosshair.isTracking);
     return peca3.trackReference(crosshair,2.5,{yOffSet:0});
 }
 
@@ -133,7 +145,8 @@ porta.onSelectFunction = () =>{
                 x:-0.2,
                 y:0.3,
                 z:-2.7
-            }
+            },
+            dur:"500"
         });
     }
     if(peca2.stopTracking(crosshair)){
@@ -142,7 +155,8 @@ porta.onSelectFunction = () =>{
                 x:-0.2,
                 y:0.3,
                 z:-2.7
-            }
+            },
+            dur:"500"
         });
     }
     if(peca3.stopTracking(crosshair)){
@@ -151,7 +165,8 @@ porta.onSelectFunction = () =>{
                 x:-0.2,
                 y:0.3,
                 z:-2.7
-            }
+            },
+            dur:"500"
         });
     }
     return false;
