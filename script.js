@@ -4,6 +4,7 @@ class AFrameObj{
     constructor(params){
         this.element = document.getElementById(params.id);
         this.worldPosition = new THREE.Vector3();
+        this.size = params.size;
         if(params.movable){
             this.movable = params.movable;
         }
@@ -18,7 +19,7 @@ class AFrameObj{
     }
 
     moveObject({newPos=this.worldPosition,dur="1500", easing="linear", elasticity="400"} = {}){
-        if(!this.movable) {
+        if(!this.movable){
             throw "Object not movable";
         }
         this.__setAttribute__({
@@ -27,8 +28,19 @@ class AFrameObj{
         });
     }
 
-    trackReference(reference,distance,{interval=5}={})
+    rotateObject({newRotation = {x:0,y:0,z:0}, dur="1500", easing="linear", elasticity="400"} = {}){
+        if(!this.movable){
+            throw "Object not movable";
+        }
+        this.__setAttribute__({
+            attrName:"animation",
+            attr:"property: rotation; to:"+newRotation.x+" "+newRotation.y+" "+newRotation.z+"; dur: "+dur+"easing: "+easing+"; elasticity: "+elasticity
+        })
+    }
+
+    trackReference(reference,distance,{interval=5,yOffSet=1.6,rotationOffSet=245}={})
     {
+        if(reference.isTracking) return false;
         this.trackInterval = setInterval(() => {
             reference.updatePosition();
             const referencePos = reference.worldPosition;
@@ -37,36 +49,54 @@ class AFrameObj{
             const newZ = referencePos.z * distance;
             const newY = Math.sqrt(distance**2-newX**2-newZ**2) * multiplier;
 
+            const rad = Math.atan2(newX,newZ);
+            const deg = rad * (180/Math.PI);
+
             const newPos={
                 x:newX,
-                y:newY+1.6,
+                y:newY+yOffSet,
                 z:newZ
             }
+
+            const newRotation={
+                x:0,
+                y:deg-rotationOffSet,
+                z:0
+            }
+
             this.moveObject({
                 newPos:newPos,
                 dur:"0",
                 elasticity:0
             });
+
+            this.rotateObject({
+                newRotation:newRotation,
+                dur:"0",
+                elasticity:0
+            });
             this.updatePosition();
         },interval);
+        reference.isTracking = true;
+        return true;
     }
 
-    stopTracking(){
+    stopTracking(reference){
         if(this.trackInterval != null){
             clearInterval(this.trackInterval);
+            reference.isTracking = false;
             return true;
         }
         return false;
     }
 
-    onSelect(cursor, size, {ticks=0} = {}){
+    onSelect(cursor, {ticks=0} = {}){
         this.selectInterval = setInterval(() => {
             if(ticks === 3 && this.onSelectFunction){
                 const result = this.onSelectFunction();
                 if(result){
                     clearInterval(this.selectInterval);
                 }
-                console.log(result);
             }
             this.updatePosition();
             cursor.updatePosition();
@@ -78,67 +108,112 @@ class AFrameObj{
             const drawnPointZ = cursor.worldPosition.z * distance;
             const drawnPointY = Math.sqrt(distance**2-drawnPointX**2-drawnPointZ**2) * multiplier + 1.6;
 
-            if(this.worldPosition.x <= drawnPointX+size && this.worldPosition.x >= drawnPointX-size &&
-            this.worldPosition.z <= drawnPointZ+size && this.worldPosition.z >= drawnPointZ-size &&
-            this.worldPosition.y <= drawnPointY+size && this.worldPosition.y >= drawnPointY-size){
+            if(this.worldPosition.x <= drawnPointX+this.size.x && this.worldPosition.x >= drawnPointX-this.size.x &&
+            this.worldPosition.z <= drawnPointZ+this.size.z && this.worldPosition.z >= drawnPointZ-this.size.z &&
+            this.worldPosition.y <= drawnPointY+this.size.y && this.worldPosition.y >= drawnPointY-this.size.y){
                 ticks+=1;
             }else ticks = 0;
         },250);
     }
 }
 
-const redObj = new AFrameObj({id:"redCube", movable:true});
-const blueObj = new AFrameObj({id:"blueCube", movable:true});
-const peca1 = new AFrameObj({id:"peca1", movable:true});
-const peca2 = new AFrameObj({id:"peca2", movable:true});
-const peca3 = new AFrameObj({id:"peca3", movable:true});
-const porta = new AFrameObj({id:"porta", movable:false});
+const peca1 = new AFrameObj({id:"peca1", movable:true,size:{x:1,z:1,y:3}});
+const peca2 = new AFrameObj({id:"peca2", movable:true,size:{x:1,z:1,y:3}});
+const peca3 = new AFrameObj({id:"peca3", movable:true,size:{x:1,z:1,y:3}});
+const porta = new AFrameObj({id:"porta", movable:false,size:{x:1,z:1,y:5}});
 
-
+const lixeira = new AFrameObj({id:"lixeira", movable:true,size:{x:2,z:2,y:2}});
+const textBox = new AFrameObj({id:"text-box",movable:true});
 const crosshair = new AFrameObj({id:"cursor"});
 
-redObj.onSelectFunction = () => {
-    redObj.trackReference(crosshair,3);
-    return true;
+//textBox.trackReference(crosshair,1,{yOffSet:1.8});
+
+peca1.onSelectFunction = () =>{
+    return peca1.trackReference(crosshair,2.5,{yOffSet:0.75});
 }
-redObj.onSelect(crosshair,1);
+peca2.onSelectFunction = () =>{
+    return peca2.trackReference(crosshair,2.5,{yOffSet:0});
+}
+peca3.onSelectFunction = () =>{
+    return peca3.trackReference(crosshair,2.5,{yOffSet:0});
+}
 
-peca1.onSelect(crosshair,1,() =>{
-    peca1.trackReference(crosshair,3);
-    return true;
-});
-
-peca2.onSelect(crosshair,1,() =>{
-    peca2.trackReference(crosshair,3);
-    return true;
-});
-
-peca3.onSelect(crosshair,1,() =>{
-    peca3.trackReference(crosshair,3);
-    return true;
-});
-
-blueObj.onSelect(crosshair,1,() =>{
-    if(redObj.stopTracking()){
-        redObj.moveObject({
-            newPos:{
-                x:Math.random() * 5,
-                y:Math.random() * 2,
-                z:Math.random() * -5
-            },
-            dur:1
-        });
-    }
-});
-
-porta.onSelect(crosshair,1,() =>{
-    if(peca1.stopTracking()){
+porta.onSelectFunction = () =>{
+    if(peca1.stopTracking(crosshair)){
         peca1.moveObject({
             newPos:{
                 x:-0.2,
                 y:0.3,
                 z:-2.7
-            }
+            },
+            dur:"500"
         });
     }
+    if(peca2.stopTracking(crosshair)){
+        peca2.moveObject({
+            newPos:{
+                x:-0.2,
+                y:0.3,
+                z:-2.7
+            },
+            dur:"500"
+        });
+    }
+    if(peca3.stopTracking(crosshair)){
+        peca3.moveObject({
+            newPos:{
+                x:-0.2,
+                y:0.3,
+                z:-2.7
+            },
+            dur:"500"
+        });
+    }
+    return false;
+}
+
+lixeira.onSelectFunction = () =>{
+    peca1.stopTracking(crosshair);
+    peca2.stopTracking(crosshair);
+    peca3.stopTracking(crosshair);
+
+
+    peca1.moveObject({
+        newPos:{
+            x:2.5,
+            y:0.8,
+            z:-1.2
+        }
+    });
+    peca2.moveObject({
+        newPos:{
+            x:2.5,
+            y:0,
+            z:0.3
+        }
+    });
+    peca3.moveObject({
+        newPos:{
+            x:2.5,
+            y:0,
+            z:0.99
+        }
+    });
+
+    peca1.onSelect(crosshair);
+    peca2.onSelect(crosshair);
+    peca3.onSelect(crosshair);
+    return false;
+}
+
+
+peca1.onSelect(crosshair);
+peca2.onSelect(crosshair);
+peca3.onSelect(crosshair);
+
+porta.onSelect(crosshair,{
+    ticks:-2
+});
+lixeira.onSelect(crosshair,{
+    ticks:-7
 });
