@@ -29,6 +29,7 @@ class AFrameObj{
 
     trackReference(reference,distance,{interval=5,yOffSet=1.6}={})
     {
+        if(reference.tracking) return false;
         this.trackInterval = setInterval(() => {
             reference.updatePosition();
             const referencePos = reference.worldPosition;
@@ -49,11 +50,14 @@ class AFrameObj{
             });
             this.updatePosition();
         },interval);
+        reference.tracking = true;
+        return true;
     }
 
-    stopTracking(){
+    stopTracking(reference){
         if(this.trackInterval != null){
             clearInterval(this.trackInterval);
+            reference.tracking = false;
             return true;
         }
         return false;
@@ -96,13 +100,13 @@ const porta = new AFrameObj({id:"porta", movable:false});
 const crosshair = new AFrameObj({id:"cursor"});
 
 peca1.onSelectFunction = () =>{
-    peca1.trackReference(crosshair,2.7,{yOffSet:0.75});
+    return peca1.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 peca2.onSelectFunction = () =>{
-    peca2.trackReference(crosshair,2.7,{yOffSet:0.75});
+    return peca2.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 peca3.onSelectFunction = () =>{
-    peca3.trackReference(crosshair,2.7,{yOffSet:0.75});
+    return peca3.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 
 peca1.onSelect(crosshair,{
