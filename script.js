@@ -29,7 +29,7 @@ class AFrameObj{
 
     trackReference(reference,distance,{interval=5,yOffSet=1.6}={})
     {
-        if(reference.tracking) return false;
+        if(reference.isTracking) return false;
         this.trackInterval = setInterval(() => {
             reference.updatePosition();
             const referencePos = reference.worldPosition;
@@ -50,14 +50,14 @@ class AFrameObj{
             });
             this.updatePosition();
         },interval);
-        reference.tracking = true;
+        reference.isTracking = true;
         return true;
     }
 
     stopTracking(reference){
         if(this.trackInterval != null){
             clearInterval(this.trackInterval);
-            reference.tracking = false;
+            reference.isTracking = false;
             return true;
         }
         return false;
