@@ -132,7 +132,7 @@ peca3.onSelect(crosshair,{
 });
 
 porta.onSelectFunction = () =>{
-    if(peca1.stopTracking()){
+    if(peca1.stopTracking(crosshair)){
         peca1.moveObject({
             newPos:{
                 x:-0.2,
@@ -141,7 +141,7 @@ porta.onSelectFunction = () =>{
             }
         });
     }
-    if(peca2.stopTracking()){
+    if(peca2.stopTracking(crosshair)){
         peca2.moveObject({
             newPos:{
                 x:-0.2,
@@ -150,7 +150,7 @@ porta.onSelectFunction = () =>{
             }
         });
     }
-    if(peca3.stopTracking()){
+    if(peca3.stopTracking(crosshair)){
         peca3.moveObject({
             newPos:{
                 x:-0.2,
