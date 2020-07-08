@@ -83,7 +83,7 @@ class AFrameObj{
             const drawnPointZ = cursor.worldPosition.z * distance;
             const drawnPointY = Math.sqrt(distance**2-drawnPointX**2-drawnPointZ**2) * multiplier + 1.6;
 
-            if(this.worldPosition.x <= drawnPointX+this.size.x && this.worldPosition.x >= drawnPointX-size.x &&
+            if(this.worldPosition.x <= drawnPointX+this.size.x && this.worldPosition.x >= drawnPointX-this.size.x &&
             this.worldPosition.z <= drawnPointZ+this.size.z && this.worldPosition.z >= drawnPointZ-this.size.z &&
             this.worldPosition.y <= drawnPointY+this.size.y && this.worldPosition.y >= drawnPointY-this.size.y){
                 ticks+=1;
@@ -93,20 +93,23 @@ class AFrameObj{
 }
 
 const peca1 = new AFrameObj({id:"peca1", movable:true,size:{x:1,z:1,y:3}});
-const peca1 = new AFrameObj({id:"peca2", movable:true,size:{x:1,z:1,y:3}});
-const peca1 = new AFrameObj({id:"peca3", movable:true,size:{x:1,z:1,y:3}});
-const peca1 = new AFrameObj({id:"porta", movable:true,size:{x:1,z:1,y:5}});
+const peca2 = new AFrameObj({id:"peca2", movable:true,size:{x:1,z:1,y:3}});
+const peca3 = new AFrameObj({id:"peca3", movable:true,size:{x:1,z:1,y:3}});
+const porta = new AFrameObj({id:"porta", movable:true,size:{x:1,z:1,y:5}});
 
 
 const crosshair = new AFrameObj({id:"cursor"});
 
 peca1.onSelectFunction = () =>{
+    console.log(crosshair.isTracking);
     return peca1.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 peca2.onSelectFunction = () =>{
+    console.log(crosshair.isTracking);
     return peca2.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 peca3.onSelectFunction = () =>{
+    console.log(crosshair.isTracking);
     return peca3.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 
