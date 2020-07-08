@@ -116,15 +116,11 @@ porta.onSelectFunction = () =>{
 }
 
 porta.onSelect(crosshair,{
-    size:
-        {
-            x:1,
-            z:1,
-            y:5
-        },
-    ticks: -2
+    size:{
+        x:1,
+        z:1,
+        y:5
+    },
+    ticks:-2
     }
 );
-
-porta.updatePosition();
-console.log(porta.worldPosition);
