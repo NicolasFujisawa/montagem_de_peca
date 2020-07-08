@@ -27,7 +27,7 @@ class AFrameObj{
         });
     }
 
-    trackReference(reference,distance,{interval=5}={})
+    trackReference(reference,distance,{interval=5,yOffSet=1.6}={})
     {
         this.trackInterval = setInterval(() => {
             reference.updatePosition();
@@ -39,7 +39,7 @@ class AFrameObj{
 
             const newPos={
                 x:newX,
-                y:newY+1.6,
+                y:newY+yOffSet,
                 z:newZ
             }
             this.moveObject({
@@ -59,7 +59,7 @@ class AFrameObj{
         return false;
     }
 
-    onSelect(cursor, size, {ticks=0} = {}){
+    onSelect(cursor, {size={x:1.5,y:1.5,z:1.5},ticks=0} = {}){
         this.selectInterval = setInterval(() => {
             if(ticks === 3 && this.onSelectFunction){
                 const result = this.onSelectFunction();
@@ -78,17 +78,15 @@ class AFrameObj{
             const drawnPointZ = cursor.worldPosition.z * distance;
             const drawnPointY = Math.sqrt(distance**2-drawnPointX**2-drawnPointZ**2) * multiplier + 1.6;
 
-            if(this.worldPosition.x <= drawnPointX+size && this.worldPosition.x >= drawnPointX-size &&
-            this.worldPosition.z <= drawnPointZ+size && this.worldPosition.z >= drawnPointZ-size &&
-            this.worldPosition.y <= drawnPointY+size && this.worldPosition.y >= drawnPointY-size){
+            if(this.worldPosition.x <= drawnPointX+size.x && this.worldPosition.x >= drawnPointX-size.x &&
+            this.worldPosition.z <= drawnPointZ+size.z && this.worldPosition.z >= drawnPointZ-size.z &&
+            this.worldPosition.y <= drawnPointY+size.y && this.worldPosition.y >= drawnPointY-size.y){
                 ticks+=1;
             }else ticks = 0;
         },250);
     }
 }
 
-const redObj = new AFrameObj({id:"redCube", movable:true});
-const blueObj = new AFrameObj({id:"blueCube", movable:true});
 const peca1 = new AFrameObj({id:"peca1", movable:true});
 const peca2 = new AFrameObj({id:"peca2", movable:true});
 const peca3 = new AFrameObj({id:"peca3", movable:true});
@@ -97,41 +95,13 @@ const porta = new AFrameObj({id:"porta", movable:false});
 
 const crosshair = new AFrameObj({id:"cursor"});
 
-redObj.onSelectFunction = () => {
-    redObj.trackReference(crosshair,3);
-    return true;
+peca1.onSelectFunction = () =>{
+    peca1.trackReference(crosshair,3,{yOffSet:0.75});
 }
-redObj.onSelect(crosshair,1);
 
-peca1.onSelect(crosshair,1,() =>{
-    peca1.trackReference(crosshair,3);
-    return true;
-});
+peca1.onSelect(crosshair);
 
-peca2.onSelect(crosshair,1,() =>{
-    peca2.trackReference(crosshair,3);
-    return true;
-});
-
-peca3.onSelect(crosshair,1,() =>{
-    peca3.trackReference(crosshair,3);
-    return true;
-});
-
-blueObj.onSelect(crosshair,1,() =>{
-    if(redObj.stopTracking()){
-        redObj.moveObject({
-            newPos:{
-                x:Math.random() * 5,
-                y:Math.random() * 2,
-                z:Math.random() * -5
-            },
-            dur:1
-        });
-    }
-});
-
-porta.onSelect(crosshair,1,() =>{
+porta.onSelectFunction = () =>{
     if(peca1.stopTracking()){
         peca1.moveObject({
             newPos:{
@@ -141,4 +111,20 @@ porta.onSelect(crosshair,1,() =>{
             }
         });
     }
-});
+
+    return false;
+}
+
+porta.onSelect(crosshair,{
+    size:
+        {
+            x:1,
+            z:1,
+            y:5
+        },
+    ticks: -2
+    }
+);
+
+porta.updatePosition();
+console.log(porta.worldPosition);
