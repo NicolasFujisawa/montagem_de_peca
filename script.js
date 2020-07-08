@@ -96,10 +96,18 @@ const porta = new AFrameObj({id:"porta", movable:false});
 const crosshair = new AFrameObj({id:"cursor"});
 
 peca1.onSelectFunction = () =>{
-    peca1.trackReference(crosshair,3,{yOffSet:0.75});
+    peca1.trackReference(crosshair,2.7,{yOffSet:0.75});
+}
+peca2.onSelectFunction = () =>{
+    peca2.trackReference(crosshair,2.7,{yOffSet:0.75});
+}
+peca3.onSelectFunction = () =>{
+    peca3.trackReference(crosshair,2.7,{yOffSet:0.75});
 }
 
 peca1.onSelect(crosshair);
+peca2.onSelect(crosshair);
+peca3.onSelect(crosshair);
 
 porta.onSelectFunction = () =>{
     if(peca1.stopTracking()){
@@ -111,7 +119,24 @@ porta.onSelectFunction = () =>{
             }
         });
     }
-
+    if(peca2.stopTracking()){
+        peca2.moveObject({
+            newPos:{
+                x:-0.2,
+                y:0.3,
+                z:-2.7
+            }
+        });
+    }
+    if(peca3.stopTracking()){
+        peca3.moveObject({
+            newPos:{
+                x:-0.2,
+                y:0.3,
+                z:-2.7
+            }
+        });
+    }
     return false;
 }
 
