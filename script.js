@@ -97,25 +97,24 @@ const peca2 = new AFrameObj({id:"peca2", movable:true,size:{x:1,z:1,y:3}});
 const peca3 = new AFrameObj({id:"peca3", movable:true,size:{x:1,z:1,y:3}});
 const porta = new AFrameObj({id:"porta", movable:true,size:{x:1,z:1,y:5}});
 
-
+const lixeira = new AFrameObj({id:"lixeira", movable:false,size:{x:2,z:2,y:2}});
+const textBox = new AFrameObj({id:"text-box",movable:true});
 const crosshair = new AFrameObj({id:"cursor"});
+
+textBox.trackReference(crosshair,1,{yOffSet:1.8});
 
 peca1.onSelectFunction = () =>{
     console.log(crosshair.isTracking);
-    return peca1.trackReference(crosshair,2.7,{yOffSet:0.75});
+    return peca1.trackReference(crosshair,2.5,{yOffSet:0.75});
 }
 peca2.onSelectFunction = () =>{
     console.log(crosshair.isTracking);
-    return peca2.trackReference(crosshair,2.7,{yOffSet:0.75});
+    return peca2.trackReference(crosshair,2.5,{yOffSet:0});
 }
 peca3.onSelectFunction = () =>{
     console.log(crosshair.isTracking);
-    return peca3.trackReference(crosshair,2.7,{yOffSet:0.75});
+    return peca3.trackReference(crosshair,2.5,{yOffSet:0});
 }
-
-peca1.onSelect(crosshair);
-peca2.onSelect(crosshair);
-peca3.onSelect(crosshair);
 
 porta.onSelectFunction = () =>{
     if(peca1.stopTracking(crosshair)){
@@ -148,6 +147,48 @@ porta.onSelectFunction = () =>{
     return false;
 }
 
+lixeira.onSelectFunction = () =>{
+    peca1.stopTracking(crosshair);
+    peca2.stopTracking(crosshair);
+    peca3.stopTracking(crosshair);
+
+
+    peca1.moveObject({
+        newPos:{
+            x:2.5,
+            y:0.8,
+            z:-1.2
+        }
+    });
+    peca2.moveObject({
+        newPos:{
+            x:2.5,
+            y:0,
+            z:0.3
+        }
+    });
+    peca3.moveObject({
+        newPos:{
+            x:2.5,
+            y:0,
+            z:0.99
+        }
+    });
+
+    peca1.onSelect(crosshair);
+    peca2.onSelect(crosshair);
+    peca3.onSelect(crosshair);
+    return false;
+}
+
+
+peca1.onSelect(crosshair);
+peca2.onSelect(crosshair);
+peca3.onSelect(crosshair);
+
 porta.onSelect(crosshair,{
     ticks:-2
+});
+lixeira.onSelect(crosshair,{
+    ticks:-7
 });
