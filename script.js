@@ -37,7 +37,7 @@ class AFrameObj{
         })
     }
 
-    trackReference(reference,distance,{interval=5,rotationOffSet=245}={})
+    trackReference(reference,distance,{interval=5,rotationOffSet=245, preventTracking=true}={})
     {
         if(reference.isTracking) return false;
         this.trackInterval = setInterval(() => {
@@ -76,7 +76,7 @@ class AFrameObj{
             });
             this.updatePosition();
         },interval);
-        reference.isTracking = true;
+        reference.isTracking = preventTracking;
         return true;
     }
 
@@ -121,11 +121,10 @@ const peca2 = new AFrameObj("peca2",{movable:true,size:{x:1,z:1,y:3},yOffSet:0})
 const peca3 = new AFrameObj("peca3",{movable:true,size:{x:1,z:1,y:3},yOffSet:0});
 const porta = new AFrameObj("porta",{size:{x:1,z:1,y:5}});
 
-const lixeira = new AFrameObj("lixeira",{movable:true,size:{x:2,z:2,y:2}});
 const textBox = new AFrameObj("text-box",{movable:true});
 const crosshair = new AFrameObj("cursor");
 
-//textBox.trackReference(crosshair,1,{yOffSet:1.8});
+textBox.trackReference(crosshair,1,{yOffSet:1.8,preventTracking:false,rotationOffSet:180});
 
 peca1.onSelectFunction = () =>{
     return peca1.trackReference(crosshair,2.5);
@@ -170,41 +169,6 @@ porta.onSelectFunction = () =>{
     }
     return false;
 }
-
-lixeira.onSelectFunction = () =>{
-    peca1.stopTracking(crosshair);
-    peca2.stopTracking(crosshair);
-    peca3.stopTracking(crosshair);
-
-
-    peca1.moveObject({
-        newPos:{
-            x:2.5,
-            y:0.8,
-            z:-1.2
-        }
-    });
-    peca2.moveObject({
-        newPos:{
-            x:2.5,
-            y:0,
-            z:0.3
-        }
-    });
-    peca3.moveObject({
-        newPos:{
-            x:2.5,
-            y:0,
-            z:0.99
-        }
-    });
-
-    peca1.onSelect(crosshair);
-    peca2.onSelect(crosshair);
-    peca3.onSelect(crosshair);
-    return false;
-}
-
 
 peca1.onSelect(crosshair);
 peca2.onSelect(crosshair);
