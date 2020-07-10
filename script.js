@@ -17,7 +17,7 @@ class AFrameObj{
         this.element.object3D.getWorldPosition(this.worldPosition);
     }
 
-    moveObject({newPos=this.worldPosition,dur="1500", easing="linear", elasticity="400"} = {}){
+    moveObject({newPos=this.worldPosition,dur=1500, easing="linear", elasticity="400"} = {}){
         if(!this.movable){
             throw "Object not movable";
         }
@@ -27,14 +27,14 @@ class AFrameObj{
         });
     }
 
-    rotateObject({newRotation = {x:0,y:0,z:0}, dur="1500", easing="linear", elasticity="400"} = {}){
+    rotateObject({newRotation = {x:0,y:0,z:0}} = {}){
         if(!this.movable){
             throw "Object not movable";
         }
         this.__setAttribute__({
-            attrName:"animation",
-            attr:"property: rotation; to:"+newRotation.x+" "+newRotation.y+" "+newRotation.z+"; dur: "+dur+"easing: "+easing+"; elasticity: "+elasticity
-        })
+            attrName:"rotation",
+            attr:newRotation.x+" "+newRotation.y+" "+newRotation.z
+        });
     }
 
     trackReference(reference,distance,{interval=5,rotationOffSet=245, preventTracking=true}={})
@@ -65,15 +65,11 @@ class AFrameObj{
 
             this.moveObject({
                 newPos:newPos,
-                dur:"0",
+                dur:0,
                 elasticity:0
             });
 
-            this.rotateObject({
-                newRotation:newRotation,
-                dur:"0",
-                elasticity:0
-            });
+            this.rotateObject({newRotation:newRotation});
             this.updatePosition();
         },interval);
         reference.isTracking = preventTracking;
@@ -119,12 +115,12 @@ class AFrameObj{
 const peca1 = new AFrameObj("peca1",{movable:true,size:{x:1,z:1,y:3},yOffSet:0.75});
 const peca2 = new AFrameObj("peca2",{movable:true,size:{x:1,z:1,y:3},yOffSet:0});
 const peca3 = new AFrameObj("peca3",{movable:true,size:{x:1,z:1,y:3},yOffSet:0});
-const porta = new AFrameObj("porta",{size:{x:1,z:1,y:5}});
+const porta = new AFrameObj("porta",{size:{x:2,z:2,y:5}});
 
 const textBox = new AFrameObj("text-box",{movable:true});
 const crosshair = new AFrameObj("cursor");
 
-textBox.trackReference(crosshair,1,{yOffSet:1.8,preventTracking:false,rotationOffSet:180});
+//textBox.trackReference(crosshair,1,{yOffSet:1.8,preventTracking:false,rotationOffSet:180});
 
 peca1.onSelectFunction = () =>{
     return peca1.trackReference(crosshair,2.5);
@@ -138,15 +134,24 @@ peca3.onSelectFunction = () =>{
 
 porta.onSelectFunction = () =>{
     if(peca1.stopTracking(crosshair)){
-        peca1.moveObject({
-            newPos:{
-                x:-0.2,
-                y:0.3,
-                z:-2.7
-            },
-            dur:"500"
-        });
+            peca1.rotateObject({
+                newRotation:{
+                    x:0,
+                    z:0,
+                    y:315
+                }
+            });
+
+            peca1.moveObject({
+                newPos:{
+                    x:-0.2,
+                    y:0.3,
+                    z:-2.7
+                },
+                dur:500
+            });
     }
+
     if(peca2.stopTracking(crosshair)){
         peca2.moveObject({
             newPos:{
@@ -154,7 +159,7 @@ porta.onSelectFunction = () =>{
                 y:0.3,
                 z:-2.7
             },
-            dur:"500"
+            dur:500
         });
     }
     if(peca3.stopTracking(crosshair)){
@@ -164,7 +169,7 @@ porta.onSelectFunction = () =>{
                 y:0.3,
                 z:-2.7
             },
-            dur:"500"
+            dur:500
         });
     }
     return false;
