@@ -120,8 +120,6 @@ const porta = new AFrameObj("porta",{size:{x:1,z:1,y:5}});
 const textBox = new AFrameObj("text-box",{movable:true});
 const crosshair = new AFrameObj("cursor");
 
-//textBox.trackReference(crosshair,1,{yOffSet:1.8,preventTracking:false,rotationOffSet:180});
-
 peca1.onSelectFunction = () =>{
     return peca1.trackReference(crosshair,2.5);
 }
@@ -197,7 +195,4 @@ peca3.onSelect(crosshair);
 
 porta.onSelect(crosshair,{
     ticks:-2
-});
-lixeira.onSelect(crosshair,{
-    ticks:-7
 });
