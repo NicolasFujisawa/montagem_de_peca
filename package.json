@@ -4,7 +4,7 @@
   "description": "Trabalho do 3° semestre com realidade virtual de Laboratório 3 com o Professor Giuliano",
   "main": "view/modeling/script.js",
   "dependencies": {
-    "three": "^0.114.0"
+    "three": "^0.125.0"
   },
   "devDependencies": {},
   "scripts": {
